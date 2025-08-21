@@ -149,7 +149,7 @@
                 title: event.title,
                 type: formatCategory(event.category),
                 date: formatDate(event.date),
-                status: event.status || 'published',
+                status: event.status || 'published', // Ensure status is set
                 participants: organizerData[event.id]?.participants || 0
             }));
 

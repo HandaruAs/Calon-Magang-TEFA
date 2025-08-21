@@ -243,21 +243,14 @@
         });
 
         function initializeGlobalDashboard() {
-            allEvents = JSON.parse(localStorage.getItem('events') || '[]');
+            allEvents = JSON.parse(localStorage.getItem('hmtiEvents') || '[]');
             
             allEvents = allEvents.map(event => ({
                 ...event,
                 status: event.status || 'published'
             }));
             
-            // Calculate and update statistics
-            updateEventStatistics(allEvents);
-            
-            // Initialize filtered events
-            filteredEvents = [...allEvents];
-            
-            // Render event list
-            renderEventList(filteredEvents);
+            applyFilters();
         }
 
         function updateEventStatistics(events) {
@@ -358,13 +351,13 @@
         function applyFilters() {
             let events = [...allEvents];
             
+            if (currentStatusFilter !== 'all') {
+                events = events.filter(event => event.status === currentStatusFilter);
+            }
+            
             // Apply category filter
             if (currentFilter !== 'all') {
                 events = events.filter(event => event.category === currentFilter);
-            }
-            
-            if (currentStatusFilter !== 'all') {
-                events = events.filter(event => (event.status || 'published') === currentStatusFilter);
             }
             
             // Apply search filter
@@ -398,11 +391,13 @@
             });
             
             filteredEvents = events;
+            
+            updateEventStatistics(events);
             renderEventList(filteredEvents);
         }
 
         function viewEventDetail(eventId) {
-            const events = JSON.parse(localStorage.getItem('events') || '[]');
+            const events = JSON.parse(localStorage.getItem('hmtiEvents') || '[]');
             const event = events.find(e => e.id == eventId);
             
             if (!event) return;

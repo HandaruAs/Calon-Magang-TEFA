@@ -131,8 +131,11 @@
                 </div>
                 
                 <div class="md:col-span-2 flex space-x-3 pt-4">
+                    <button type="button" onclick="saveAsDraft()" class="flex-1 bg-yellow-600 hover:bg-yellow-700 text-white py-2 px-4 rounded-lg font-semibold transition-colors">
+                        💾 Simpan sebagai Draft
+                    </button>
                     <button type="submit" class="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white py-2 px-4 rounded-lg font-semibold transition-colors">
-                        Simpan
+                        🚀 Publish Event
                     </button>
                     <button type="button" onclick="closeEventModal()" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded-lg font-semibold transition-colors">
                         Batal
@@ -166,7 +169,7 @@
     </div>
 
     <script>
-        let events = JSON.parse(localStorage.getItem('events')) || [
+        let events = JSON.parse(localStorage.getItem('hmtiEvents')) || [
             {
                 id: 1,
                 title: 'Seminar AI & Machine Learning',
@@ -175,7 +178,8 @@
                 location: 'Auditorium HMTI',
                 organizer: 'Divisi Akademik HMTI',
                 description: 'Seminar tentang perkembangan terbaru dalam bidang Artificial Intelligence dan Machine Learning untuk mahasiswa Teknik Informatika.',
-                price: 50000
+                price: 50000,
+                status: 'published'
             },
             {
                 id: 2,
@@ -185,7 +189,8 @@
                 location: 'Lapangan Kampus',
                 organizer: 'Divisi Seni & Budaya HMTI',
                 description: 'Konser musik dengan tema teknologi yang menampilkan band-band lokal dan pertunjukan multimedia interaktif.',
-                price: 75000
+                price: 75000,
+                status: 'published'
             },
             {
                 id: 3,
@@ -195,7 +200,8 @@
                 location: 'Lab Komputer',
                 organizer: 'Divisi Kompetisi HMTI',
                 description: 'Kompetisi programming 24 jam untuk menciptakan solusi inovatif terhadap permasalahan teknologi terkini.',
-                price: 0
+                price: 0,
+                status: 'published'
             }
         ];
 
@@ -203,7 +209,7 @@
         let deletingEventId = null;
 
         function saveEvents() {
-            localStorage.setItem('events', JSON.stringify(events));
+            localStorage.setItem('hmtiEvents', JSON.stringify(events));
         }
 
         function renderEvents() {
@@ -213,7 +219,14 @@
             events.forEach(event => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${event.title}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        <div class="flex items-center space-x-2">
+                            <span>${event.title}</span>
+                            <span class="px-2 py-1 text-xs font-semibold rounded-full ${getStatusBadgeClass(event.status || 'published')}">
+                                ${getStatusText(event.status || 'published')}
+                            </span>
+                        </div>
+                    </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         <span class="px-2 py-1 text-xs font-semibold rounded-full ${getCategoryBadgeClass(event.category)}">
                             ${formatCategory(event.category)}
@@ -225,8 +238,13 @@
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${event.description}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${formatPrice(event.price)}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <button onclick="editEvent(${event.id})" class="text-cyan-600 hover:text-cyan-900 mr-3">Edit</button>
-                        <button onclick="deleteEvent(${event.id})" class="text-red-600 hover:text-red-900">Hapus</button>
+                        <div class="flex space-x-2">
+                            <button onclick="editEvent(${event.id})" class="text-cyan-600 hover:text-cyan-900">Edit</button>
+                            ${(event.status === 'draft') ? 
+                                `<button onclick="publishEvent(${event.id})" class="text-green-600 hover:text-green-900">Publish</button>` : ''
+                            }
+                            <button onclick="deleteEvent(${event.id})" class="text-red-600 hover:text-red-900">Hapus</button>
+                        </div>
                     </td>
                 `;
                 tbody.appendChild(row);
@@ -308,6 +326,84 @@
             }
         }
 
+        function getStatusBadgeClass(status) {
+            switch(status) {
+                case 'draft': return 'bg-yellow-100 text-yellow-800';
+                case 'published': return 'bg-green-100 text-green-800';
+                case 'archived': return 'bg-gray-100 text-gray-800';
+                default: return 'bg-gray-100 text-gray-800';
+            }
+        }
+
+        function getStatusText(status) {
+            switch(status) {
+                case 'draft': return 'Draft';
+                case 'published': return 'Published';
+                case 'archived': return 'Archived';
+                default: return 'Published';
+            }
+        }
+
+        function publishEvent(id) {
+            const eventIndex = events.findIndex(e => e.id === id);
+            if (eventIndex !== -1) {
+                events[eventIndex].status = 'published';
+                saveEvents();
+                renderEvents();
+                alert('Event berhasil dipublish!');
+            }
+        }
+
+        function saveAsDraft() {
+            const title = document.getElementById('eventTitle').value;
+            const category = document.getElementById('eventCategory').value;
+            const date = document.getElementById('eventDate').value;
+            const location = document.getElementById('eventLocation').value;
+            const organizer = document.getElementById('eventOrganizer').value;
+            const description = document.getElementById('eventDescription').value;
+            const price = parseInt(document.getElementById('eventPrice').value);
+
+            if (!title || !category || !date || !location) {
+                alert('Mohon isi field yang wajib diisi (Judul, Kategori, Tanggal, Tempat)');
+                return;
+            }
+
+            if (editingEventId) {
+                const eventIndex = events.findIndex(e => e.id === editingEventId);
+                if (eventIndex !== -1) {
+                    events[eventIndex] = {
+                        ...events[eventIndex],
+                        title,
+                        category,
+                        date,
+                        location,
+                        organizer,
+                        description,
+                        price,
+                        status: 'draft'
+                    };
+                }
+            } else {
+                const newEvent = {
+                    id: Date.now(),
+                    title,
+                    category,
+                    date,
+                    location,
+                    organizer,
+                    description,
+                    price,
+                    status: 'draft'
+                };
+                events.push(newEvent);
+            }
+
+            saveEvents();
+            renderEvents();
+            closeEventModal();
+            alert('Event berhasil disimpan sebagai draft!');
+        }
+
         document.getElementById('eventForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -330,7 +426,8 @@
                         location,
                         organizer,
                         description,
-                        price
+                        price,
+                        status: 'published'
                     };
                 }
             } else {
@@ -342,7 +439,8 @@
                     location,
                     organizer,
                     description,
-                    price
+                    price,
+                    status: 'published'
                 };
                 events.push(newEvent);
             }
@@ -350,6 +448,7 @@
             saveEvents();
             renderEvents();
             closeEventModal();
+            alert('Event berhasil dipublish!');
         });
 
         renderEvents();
