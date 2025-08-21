@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organizer Dashboard - HMTI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;900&family=Open+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="dashboard-styles.css">
+</head>
+<body class="font-opensans bg-gray-50 text-gray-600">
+    <!-- Header -->
+    <header class="bg-cyan-600 text-white shadow-lg">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
+                        <span class="text-cyan-600 font-bold text-lg">H</span>
+                    </div>
+                    <div>
+                        <h1 class="font-montserrat font-black text-xl">HMTI Organizer</h1>
+                        <p class="text-xs opacity-90">Dashboard Event Organizer</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm">Selamat datang, Organizer</span>
+                    <a href="index.html" class="bg-purple-500 px-4 py-2 rounded-lg hover:bg-purple-600 transition-colors">
+                        Kembali ke Beranda
+                    </a>
+                    <a href="login.html" class="text-cyan-200 hover:text-white transition-colors">Logout</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-8">
+        <!-- Welcome Section -->
+        <div class="bg-gradient-to-br from-cyan-50 to-purple-50 rounded-xl p-8 mb-8">
+            <h1 class="font-montserrat font-black text-3xl text-gray-800 mb-2">Dashboard Event Organizer</h1>
+            <p class="text-lg text-gray-600">Kelola event Anda dengan mudah dan efisien</p>
+        </div>
+
+        <!-- Quick Action - Add New Event -->
+        <div class="mb-8">
+            <button onclick="window.location.href='event-management.html'" class="cursor-pointer bg-gradient-to-r from-purple-500 to-cyan-500 text-white px-8 py-4 rounded-xl font-montserrat font-bold text-lg hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300 active:scale-95">
+                ✨ Tambah Event Baru
+            </button>
+        </div>
+
+        <!-- User Management Section -->
+        <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-cyan-100 rounded-lg flex items-center justify-center mr-4">
+                        <svg class="w-6 h-6 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-montserrat font-bold text-xl text-gray-800">Manajemen User</h3>
+                        <p class="text-gray-600">Kelola pengguna dan hak akses</p>
+                    </div>
+                </div>
+                <button onclick="addNewUser()" class="bg-cyan-500 hover:bg-cyan-600 text-white px-6 py-3 rounded-lg transition-colors font-semibold">
+                    ➕ Tambah Pengguna Baru
+                </button>
+            </div>
+        </div>
+
+        <!-- Event Statistics -->
+        <div class="grid md:grid-cols-3 gap-6 mb-8">
+            <!-- Draft Events -->
+            <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                        </svg>
+                    </div>
+                    <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">Draft</span>
+                </div>
+                <h3 class="font-montserrat font-bold text-2xl text-gray-800 mb-1" id="draftEvents">0</h3>
+                <p class="text-gray-600 text-sm">Event Draft</p>
+            </div>
+
+            <!-- Published Events -->
+            <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                        </svg>
+                    </div>
+                    <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Live</span>
+                </div>
+                <h3 class="font-montserrat font-bold text-2xl text-gray-800 mb-1" id="publishedEvents">0</h3>
+                <p class="text-gray-600 text-sm">Event Published</p>
+            </div>
+
+            <!-- Archived Events -->
+            <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8l6 6m0 0l6-6m-6 6V3"></path>
+                        </svg>
+                    </div>
+                    <span class="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full">Archived</span>
+                </div>
+                <h3 class="font-montserrat font-bold text-2xl text-gray-800 mb-1" id="archivedEvents">0</h3>
+                <p class="text-gray-600 text-sm">Event Archived</p>
+            </div>
+        </div>
+
+        <!-- Event List -->
+        <div class="bg-white rounded-xl shadow-lg p-8">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="font-montserrat font-bold text-xl text-gray-800">Daftar Event Saya</h3>
+                <div class="flex space-x-2">
+                    <button onclick="filterEvents('all')" class="px-4 py-2 bg-cyan-100 text-cyan-700 rounded-lg hover:bg-cyan-200 transition-colors filter-btn active" data-filter="all">Semua</button>
+                    <button onclick="filterEvents('draft')" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors filter-btn" data-filter="draft">Draft</button>
+                    <button onclick="filterEvents('published')" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors filter-btn" data-filter="published">Published</button>
+                    <button onclick="filterEvents('archived')" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors filter-btn" data-filter="archived">Archived</button>
+                </div>
+            </div>
+            
+            <div class="space-y-4" id="eventList">
+                <!-- Event items will be populated by JavaScript -->
+            </div>
+        </div>
+    </main>
+
+    <script src="dashboard-script.js"></script>
+    <script>
+        let editingEventId = null;
+        let deletingEventId = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeOrganizerDashboard();
+        });
+
+        function initializeOrganizerDashboard() {
+            const events = JSON.parse(localStorage.getItem('hmtiEvents')) || [];
+            const organizerData = JSON.parse(localStorage.getItem('hmtiOrganizerData')) || {};
+            
+            const transformedEvents = events.map(event => ({
+                id: event.id,
+                title: event.title,
+                type: formatCategory(event.category),
+                date: formatDate(event.date),
+                status: event.status || 'published',
+                participants: organizerData[event.id]?.participants || 0
+            }));
+
+            renderEventList(transformedEvents);
+            updateStatistics(transformedEvents);
+        }
+
+        function formatCategory(category) {
+            const categoryMap = {
+                'seminar teknologi': 'Seminar',
+                'konser musik': 'Konser',
+                'kompetisi IT': 'Lomba',
+                'pameran karya': 'Pameran'
+            };
+            return categoryMap[category] || category;
+        }
+
+        function formatDate(dateTime) {
+            const date = new Date(dateTime);
+            return date.toLocaleDateString('id-ID');
+        }
+
+        function updateStatistics(events) {
+            const draftCount = events.filter(e => e.status === 'draft').length;
+            const publishedCount = events.filter(e => e.status === 'published').length;
+            const archivedCount = events.filter(e => e.status === 'archived').length;
+            
+            document.getElementById('draftEvents').textContent = draftCount;
+            document.getElementById('publishedEvents').textContent = publishedCount;
+            document.getElementById('archivedEvents').textContent = archivedCount;
+        }
+
+        function renderEventList(events) {
+            const eventList = document.getElementById('eventList');
+            eventList.innerHTML = '';
+
+            events.forEach(event => {
+                const statusColor = {
+                    'draft': 'bg-yellow-100 text-yellow-800',
+                    'published': 'bg-green-100 text-green-800',
+                    'archived': 'bg-gray-100 text-gray-800'
+                };
+
+                const statusText = {
+                    'draft': 'Draft',
+                    'published': 'Published',
+                    'archived': 'Archived'
+                };
+
+                const eventItem = document.createElement('div');
+                eventItem.className = `event-item flex items-center justify-between p-6 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors`;
+                eventItem.setAttribute('data-status', event.status);
+                
+                eventItem.innerHTML = `
+                    <div class="flex-1">
+                        <div class="flex items-center space-x-3 mb-2">
+                            <h4 class="font-montserrat font-bold text-lg text-gray-800">${event.title}</h4>
+                            <span class="text-xs px-2 py-1 rounded-full ${statusColor[event.status]}">${statusText[event.status]}</span>
+                        </div>
+                        <div class="flex items-center space-x-4 text-sm text-gray-600">
+                            <span>📅 ${event.date}</span>
+                            <span>🏷️ ${event.type}</span>
+                            <span>👥 ${event.participants} peserta</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="editEventModal(${event.id})" class="px-4 py-2 bg-cyan-100 text-cyan-700 rounded-lg hover:bg-cyan-200 transition-colors">
+                            Edit
+                        </button>
+                        ${event.status === 'draft' ? 
+                            `<button onclick="publishEvent(${event.id})" class="px-4 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors">
+                                Publish
+                            </button>` : ''
+                        }
+                        <button onclick="deleteEventModal(${event.id})" class="px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors">
+                            Hapus
+                        </button>
+                    </div>
+                `;
+                
+                eventList.appendChild(eventItem);
+            });
+        }
+
+        function filterEvents(status) {
+            const eventItems = document.querySelectorAll('.event-item');
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            
+            filterBtns.forEach(btn => {
+                btn.classList.remove('active', 'bg-cyan-100', 'text-cyan-700');
+                btn.classList.add('bg-gray-100', 'text-gray-700');
+            });
+            
+            const activeBtn = document.querySelector(`[data-filter="${status}"]`);
+            activeBtn.classList.add('active', 'bg-cyan-100', 'text-cyan-700');
+            activeBtn.classList.remove('bg-gray-100', 'text-gray-700');
+            
+            eventItems.forEach(item => {
+                if (status === 'all' || item.getAttribute('data-status') === status) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        function editEventModal(eventId) {
+            window.location.href = `event-management.html?edit=${eventId}`;
+        }
+
+        function deleteEventModal(eventId) {
+            window.location.href = `event-management.html?delete=${eventId}`;
+        }
+
+        function publishEvent(eventId) {
+            const events = JSON.parse(localStorage.getItem('hmtiEvents')) || [];
+            const eventIndex = events.findIndex(e => e.id === eventId);
+            
+            if (eventIndex !== -1) {
+                events[eventIndex].status = 'published';
+                localStorage.setItem('hmtiEvents', JSON.stringify(events));
+                initializeOrganizerDashboard();
+                alert('Event berhasil dipublish!');
+            }
+        }
+
+        function editEvent(eventId) {
+            editEventModal(eventId);
+        }
+
+        function deleteEvent(eventId) {
+            deleteEventModal(eventId);
+        }
+
+        function addNewUser() {
+            window.location.href = 'user-management.html';
+        }
+    </script>
+</body>
+</html>

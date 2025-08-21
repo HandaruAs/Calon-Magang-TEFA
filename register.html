@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrasi - Event Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #2d3748;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            color: #718096;
+            font-size: 1rem;
+            margin-bottom: 32px;
+        }
+
+        .form {
+            text-align: left;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #2d3748;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background-color: #f8fafc;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .role-status {
+            margin-top: 8px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .role-status.valid {
+            background-color: #f0fff4;
+            color: #22543d;
+            border: 1px solid #9ae6b4;
+        }
+
+        .role-status.invalid {
+            background-color: #fed7d7;
+            color: #742a2a;
+            border: 1px solid #fc8181;
+        }
+
+        .message {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .message.success {
+            background-color: #f0fff4;
+            color: #22543d;
+            border: 1px solid #9ae6b4;
+        }
+
+        .message.error {
+            background-color: #fed7d7;
+            color: #742a2a;
+            border: 1px solid #fc8181;
+        }
+
+        .message.hidden {
+            display: none;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .navigation-links {
+            margin-top: 24px;
+            text-align: center;
+        }
+
+        .navigation-links p {
+            color: #718096;
+            font-size: 0.95rem;
+        }
+
+        .navigation-links a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .navigation-links a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                padding: 30px 25px;
+            }
+            
+            .header h1 {
+                font-size: 1.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <h1>REGISTRASI</h1>
+                <p>Silahkan daftar terlebih dahulu</p>
+            </div>
+            
+            <form id="registrationForm" class="form">
+                <div class="form-group">
+                    <label for="username">Username :</label>
+                    <input type="text" id="username" name="username" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password :</label>
+                    <input type="password" id="password" name="password" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="inviteCode">Invite Code :</label>
+                    <input type="text" id="inviteCode" name="inviteCode" class="form-input" placeholder="Masukkan invite code" required>
+                    <div id="roleStatus" class="role-status"></div>
+                </div>
+
+                <div id="message" class="message hidden"></div>
+
+                <button type="submit" id="submitBtn" class="submit-btn">DAFTAR</button>
+            </form>
+
+            <div class="navigation-links">
+                <p>Sudah punya akun? <a href="login.html">Login di sini</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const inviteCodes = {
+            'ADMIN2024': 'admin',
+            'ORG2024': 'organizer'
+        };
+
+        const inviteCodeInput = document.getElementById('inviteCode');
+        const roleStatus = document.getElementById('roleStatus');
+        const form = document.getElementById('registrationForm');
+        const messageDiv = document.getElementById('message');
+
+        inviteCodeInput.addEventListener('input', function() {
+            const code = this.value.toUpperCase();
+            
+            if (inviteCodes[code]) {
+                const role = inviteCodes[code];
+                roleStatus.textContent = `Role: ${role.charAt(0).toUpperCase() + role.slice(1)}`;
+                roleStatus.className = 'role-status valid';
+            } else if (code.length > 0) {
+                roleStatus.textContent = 'Invite code tidak valid';
+                roleStatus.className = 'role-status invalid';
+            } else {
+                roleStatus.textContent = '';
+                roleStatus.className = 'role-status';
+            }
+        });
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const inviteCode = document.getElementById('inviteCode').value.toUpperCase();
+            
+            if (!inviteCodes[inviteCode]) {
+                messageDiv.textContent = 'Invite code tidak valid!';
+                messageDiv.className = 'message error';
+                messageDiv.classList.remove('hidden');
+                return;
+            }
+            
+            const role = inviteCodes[inviteCode];
+            
+            // Get existing users or create empty array
+            let users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+            
+            // Check if username already exists
+            if (users.find(user => user.username === username)) {
+                messageDiv.textContent = 'Username sudah terdaftar! Silahkan gunakan username lain.';
+                messageDiv.className = 'message error';
+                messageDiv.classList.remove('hidden');
+                return;
+            }
+            
+            // Add new user
+            const newUser = {
+                username: username,
+                password: password,
+                role: role,
+                registeredAt: new Date().toISOString()
+            };
+            
+            users.push(newUser);
+            localStorage.setItem('registeredUsers', JSON.stringify(users));
+            
+            messageDiv.textContent = `Registrasi berhasil! Akun ${username} telah dibuat dengan role ${role}.`;
+            messageDiv.className = 'message success';
+            messageDiv.classList.remove('hidden');
+            
+            // Reset form
+            form.reset();
+            roleStatus.textContent = '';
+            roleStatus.className = 'role-status';
+            
+            // Redirect to login after successful registration
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

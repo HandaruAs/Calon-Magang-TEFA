@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manajemen Event - HMTI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;900&family=Open+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="dashboard-styles.css">
+</head>
+<body class="font-opensans bg-gray-50 text-gray-600">
+    <!-- Header -->
+    <header class="bg-cyan-600 text-white shadow-lg">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
+                        <span class="text-cyan-600 font-bold text-lg">H</span>
+                    </div>
+                    <div>
+                        <h1 class="font-montserrat font-black text-xl">HMTI Event Management</h1>
+                        <p class="text-xs opacity-90">Kelola Event & Kegiatan</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="organizer-dashboard.html" class="bg-purple-500 px-4 py-2 rounded-lg hover:bg-purple-600 transition-colors">
+                        Kembali ke Dashboard
+                    </a>
+                    <a href="login.html" class="text-cyan-200 hover:text-white transition-colors">Logout</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-8">
+        <!-- Page Title -->
+        <div class="bg-gradient-to-br from-cyan-50 to-purple-50 rounded-xl p-8 mb-8">
+            <h1 class="font-montserrat font-black text-3xl text-gray-800 mb-2">Manajemen Event</h1>
+            <p class="text-lg text-gray-600">Kelola semua event dan kegiatan HMTI</p>
+        </div>
+
+        <!-- Add Event Button -->
+        <div class="mb-6">
+            <button onclick="openAddEventModal()" class="bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                ➕ Tambah Event Baru
+            </button>
+        </div>
+
+        <!-- Events Table -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h3 class="font-montserrat font-bold text-lg text-gray-800">Daftar Event</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Judul Event</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategori</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tempat</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Organizer</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Deskripsi</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Harga</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="eventsTableBody" class="bg-white divide-y divide-gray-200">
+                        <!-- Events will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add/Edit Event Modal -->
+    <div id="eventModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-8 max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 id="modalTitle" class="font-montserrat font-bold text-xl text-gray-800">Tambah Event Baru</h3>
+                <button onclick="closeEventModal()" class="text-gray-500 hover:text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <form id="eventForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Judul Event</label>
+                    <input type="text" id="eventTitle" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500" required>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Kategori Event</label>
+                    <select id="eventCategory" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500" required>
+                        <option value="">Pilih Kategori</option>
+                        <option value="Seminar">Seminar</option>
+                        <option value="Konser">Konser</option>
+                        <option value="Lomba">Lomba</option>
+                        <option value="Pameran">Pameran</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Mulai</label>
+                    <input type="datetime-local" id="eventDate" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500" required>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Tempat</label>
+                    <input type="text" id="eventLocation" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500" required>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Organizer</label>
+                    <input type="text" id="eventOrganizer" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500" required>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Harga (Rp)</label>
+                    <input type="number" id="eventPrice" min="0" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500" required>
+                </div>
+                
+                <div></div>
+                
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Deskripsi Event</label>
+                    <textarea id="eventDescription" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 resize-none" placeholder="Masukkan deskripsi event..." required></textarea>
+                </div>
+                
+                <div class="md:col-span-2 flex space-x-3 pt-4">
+                    <button type="submit" class="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white py-2 px-4 rounded-lg font-semibold transition-colors">
+                        Simpan
+                    </button>
+                    <button type="button" onclick="closeEventModal()" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded-lg font-semibold transition-colors">
+                        Batal
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4">
+            <div class="text-center">
+                <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                    </svg>
+                </div>
+                <h3 class="font-montserrat font-bold text-lg text-gray-800 mb-2">Hapus Event</h3>
+                <p class="text-gray-600 mb-6">Apakah Anda yakin ingin menghapus event ini? Tindakan ini tidak dapat dibatalkan.</p>
+                <div class="flex space-x-3">
+                    <button onclick="confirmDelete()" class="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg font-semibold transition-colors">
+                        Hapus
+                    </button>
+                    <button onclick="closeDeleteModal()" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded-lg font-semibold transition-colors">
+                        Batal
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let events = JSON.parse(localStorage.getItem('events')) || [
+            {
+                id: 1,
+                title: 'Seminar AI & Machine Learning',
+                category: 'Seminar',
+                date: '2024-03-15T10:00',
+                location: 'Auditorium HMTI',
+                organizer: 'Divisi Akademik HMTI',
+                description: 'Seminar tentang perkembangan terbaru dalam bidang Artificial Intelligence dan Machine Learning untuk mahasiswa Teknik Informatika.',
+                price: 50000
+            },
+            {
+                id: 2,
+                title: 'Konser Musik Teknologi',
+                category: 'Konser',
+                date: '2024-03-20T19:00',
+                location: 'Lapangan Kampus',
+                organizer: 'Divisi Seni & Budaya HMTI',
+                description: 'Konser musik dengan tema teknologi yang menampilkan band-band lokal dan pertunjukan multimedia interaktif.',
+                price: 75000
+            },
+            {
+                id: 3,
+                title: 'Hackathon 2024',
+                category: 'Lomba',
+                date: '2024-04-01T08:00',
+                location: 'Lab Komputer',
+                organizer: 'Divisi Kompetisi HMTI',
+                description: 'Kompetisi programming 24 jam untuk menciptakan solusi inovatif terhadap permasalahan teknologi terkini.',
+                price: 0
+            }
+        ];
+
+        let editingEventId = null;
+        let deletingEventId = null;
+
+        function saveEvents() {
+            localStorage.setItem('events', JSON.stringify(events));
+        }
+
+        function renderEvents() {
+            const tbody = document.getElementById('eventsTableBody');
+            tbody.innerHTML = '';
+
+            events.forEach(event => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${event.title}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <span class="px-2 py-1 text-xs font-semibold rounded-full ${getCategoryBadgeClass(event.category)}">
+                            ${formatCategory(event.category)}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${formatDateTime(event.date)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${event.location}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${event.organizer || 'Tidak ada'}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${event.description}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${formatPrice(event.price)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button onclick="editEvent(${event.id})" class="text-cyan-600 hover:text-cyan-900 mr-3">Edit</button>
+                        <button onclick="deleteEvent(${event.id})" class="text-red-600 hover:text-red-900">Hapus</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function getCategoryBadgeClass(category) {
+            switch(category) {
+                case 'Seminar': return 'bg-blue-100 text-blue-800';
+                case 'Konser': return 'bg-purple-100 text-purple-800';
+                case 'Lomba': return 'bg-green-100 text-green-800';
+                case 'Pameran': return 'bg-yellow-100 text-yellow-800';
+                default: return 'bg-gray-100 text-gray-800';
+            }
+        }
+
+        function formatCategory(category) {
+            return category;
+        }
+
+        function formatDateTime(dateTime) {
+            const date = new Date(dateTime);
+            return date.toLocaleDateString('id-ID') + ' ' + date.toLocaleTimeString('id-ID', {hour: '2-digit', minute: '2-digit'});
+        }
+
+        function formatPrice(price) {
+            return price === 0 ? 'Gratis' : 'Rp ' + price.toLocaleString('id-ID');
+        }
+
+        function openAddEventModal() {
+            editingEventId = null;
+            document.getElementById('modalTitle').textContent = 'Tambah Event Baru';
+            document.getElementById('eventForm').reset();
+            document.getElementById('eventModal').classList.remove('hidden');
+            document.getElementById('eventModal').classList.add('flex');
+        }
+
+        function editEvent(id) {
+            const event = events.find(e => e.id === id);
+            if (event) {
+                editingEventId = id;
+                document.getElementById('modalTitle').textContent = 'Edit Event';
+                document.getElementById('eventTitle').value = event.title;
+                document.getElementById('eventCategory').value = event.category;
+                document.getElementById('eventDate').value = event.date;
+                document.getElementById('eventLocation').value = event.location;
+                document.getElementById('eventOrganizer').value = event.organizer || '';
+                document.getElementById('eventDescription').value = event.description || '';
+                document.getElementById('eventPrice').value = event.price;
+                document.getElementById('eventModal').classList.remove('hidden');
+                document.getElementById('eventModal').classList.add('flex');
+            }
+        }
+
+        function deleteEvent(id) {
+            deletingEventId = id;
+            document.getElementById('deleteModal').classList.remove('hidden');
+            document.getElementById('deleteModal').classList.add('flex');
+        }
+
+        function closeEventModal() {
+            document.getElementById('eventModal').classList.add('hidden');
+            document.getElementById('eventModal').classList.remove('flex');
+            editingEventId = null;
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.add('hidden');
+            document.getElementById('deleteModal').classList.remove('flex');
+            deletingEventId = null;
+        }
+
+        function confirmDelete() {
+            if (deletingEventId) {
+                events = events.filter(event => event.id !== deletingEventId);
+                saveEvents();
+                renderEvents();
+                closeDeleteModal();
+            }
+        }
+
+        document.getElementById('eventForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const title = document.getElementById('eventTitle').value;
+            const category = document.getElementById('eventCategory').value;
+            const date = document.getElementById('eventDate').value;
+            const location = document.getElementById('eventLocation').value;
+            const organizer = document.getElementById('eventOrganizer').value;
+            const description = document.getElementById('eventDescription').value;
+            const price = parseInt(document.getElementById('eventPrice').value);
+
+            if (editingEventId) {
+                const eventIndex = events.findIndex(e => e.id === editingEventId);
+                if (eventIndex !== -1) {
+                    events[eventIndex] = {
+                        ...events[eventIndex],
+                        title,
+                        category,
+                        date,
+                        location,
+                        organizer,
+                        description,
+                        price
+                    };
+                }
+            } else {
+                const newEvent = {
+                    id: Date.now(),
+                    title,
+                    category,
+                    date,
+                    location,
+                    organizer,
+                    description,
+                    price
+                };
+                events.push(newEvent);
+            }
+
+            saveEvents();
+            renderEvents();
+            closeEventModal();
+        });
+
+        renderEvents();
+    </script>
+</body>
+</html>
