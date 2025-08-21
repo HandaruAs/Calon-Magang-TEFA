@@ -8,7 +8,7 @@ Aplikasi web untuk mengelola event dan user dalam organisasi HMTI. Dibuat dengan
 
 ## Fitur
 
-- **Login/Register**: Sistem autentikasi dengan 3 role (Admin, Organizer, Global)
+- **Login/Register**: Sistem autentikasi dengan 2 role (Admin, Organizer)
 - **Dashboard**: Dashboard berbeda untuk setiap role
 - **Event Management**: Buat, edit, dan kelola event
 - **User Management**: Kelola pengguna (khusus admin)
@@ -46,10 +46,6 @@ Untuk testing, gunakan akun berikut:
 - Username: `organizer1` 
 - Password: `organizer123`
 
-**Global User:**
-- Username: `global1`
-- Password: `global123`
-
 ## Struktur File
 
 \`\`\`
@@ -75,8 +71,9 @@ Untuk testing, gunakan akun berikut:
 ## Kontak
 
 - GitHub: [@HandaruAs](https://github.com/HandaruAs)
-- Email: hmti@university.ac.id
+- Email: handaruarioseto12@gmail.com
 
 ---
 
-⭐ Jangan lupa kasih star kalau bermanfaat!
+
+
